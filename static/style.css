@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
+body{
+    font-family: 'Source Code Pro', monospace;
+    background-color: #1b1e29;
+    padding: 0;
+    margin: 0;
+}
+
+label{
+    color: white;
+}
+
+p{
+    margin: 6px;
+    color: white;
+}
+
+a, a:hover, a:focus, a:active{
+    text-decoration:none;
+    text-decoration: none;
+    color: inherit;
+}
+
+input, textarea {
+    -webkit-transition: all 0.15s ease-in-out;
+    -moz-transition: all 0.15s ease-in-out;
+    -ms-transition: all 0.15s ease-in-out;
+    -o-transition: all 0.15s ease-in-out;
+    outline: none;
+    border: 1px solid #DDDDDD;
+}
+   
+input:focus, textarea:focus {
+    box-shadow: 0 0 5px #fc4176;
+}
+
+.notification{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+.header{
+    display: flex;
+    background-color: #33334c;
+    padding: 10px;
+    justify-content: space-between
+}
+
+.title{
+    color: #fc4176;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 12px;
+}
+
+.send-status
+{
+	background-color:#fc4176;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+    border-radius:2px;
+	border:1px solid #fc4176;
+	font-size:16px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #5b6178;
+    margin: 4px;
+}
+
+.avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.logged-username{
+    color: #fc4176;
+    font-weight: bolder;
+    font-size: larger;
+}
+
+.login-label{
+    color: #fc4176;
+    font-size: 20px;
+    margin: 12px;
+}
+
+.login-box{
+    padding: 20px;
+    width: 50%;
+    height: 16px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    border-width: 0px;
+    border-color: #000000;
+    background-color: #33334c;
+    border-style: solid;
+    border-radius: 5px;
+    color: #ffffff;
+    resize: none;
+}
+
+.edit-box{
+    padding: 20px;
+    width: 80%;
+    height: 50px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    border-width: 0px;
+    border-color: #000000;
+    background-color: #33334c;
+    color: #ffffff;
+    resize: none;  
+    border-style: solid;
+    border-radius: 2px;
+}
+
+.edit-post-div{
+    display: none;
+}
+
+.status-box{
+    padding: 20px;
+    width: 80%;
+    height: 50px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    border-width: 0px;
+    border-color: #000000;
+    background-color: #33334c;
+    color: #ffffff;
+    resize: none;
+    border-style: solid;
+    border-radius: 2px;
+}
+
+.status-container{
+    text-align: center;
+    color: #2d303e;
+    margin: 12px auto;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 12px;
+    width: 35%;
+}
+
+.upper-part{
+    vertical-align: center;
+    position: relative;
+    display: flex;
+}
+
+.post-edit-icons{
+    position: absolute;
+    margin-left: 96%;
+    cursor: pointer;
+}
+
+.post-container{
+    color: #2d303e;
+    margin: 12px auto;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 12px;
+    width: 40%;
+}
+
+.avatar{
+    vertical-align: middle;
+    margin: 6px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.poster-info{
+    display: flex;
+}
+
+.post-time{
+    color: #2d303e
+}
+
+.poster-name{
+    color: #fc4176;
+    font-weight: bold;
+}
+
+.post-text
+{
+    color:white;
+    word-wrap: break-word;
+}
+
+.like-comment-count{
+    display: flex;
+    
+}
+
+.postLikes{
+    color: #33334c;
+}
+
+.reaction-buttons{
+    display: block;
+    text-align: center;
+}
+
+.icon{
+    margin: auto 10%;
+}

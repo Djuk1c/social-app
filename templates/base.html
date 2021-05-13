@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{% block title %}{% endblock %} - Leetspace.io</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/5X87hFi.png">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="title">Leetspace.io</a>
+        {% if current_user.is_authenticated %}
+        <a href="/logout" class="title">Log Out</a>
+        {% endif %}
+        {% if not current_user.is_authenticated %}
+        <a href="/login" class="title">Login</a>
+        {% endif %}
+    </div>
+    
+    {% block body %}
+    {% endblock %}
+</body>
+</html>

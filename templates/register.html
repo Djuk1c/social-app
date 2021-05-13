@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="status-container">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      <div class="notification">
+          {{ messages[0] }}
+      </div><br>
+  {% endif %}
+  {% endwith %}
+  <form method="POST" action="/register">
+      <label for="username" class="login-label">Username:</label><br>
+      <input type="text" id="username" name="username" class="login-box" autocomplete="off"><br>
+      <label for="password" class="login-label">Password:</label><br>
+      <input type="password" id="password" name="password" class="login-box" autocomplete="off">
+      <div class="send-btn"></div>
+        <button class="send-status">Register</button>
+      </div>
+    </form>
+</div>
+{% endblock %}
