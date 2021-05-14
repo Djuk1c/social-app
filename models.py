@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from . import db
+from datetime import datetime
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) # primary keys are required by SQLAlchemy
@@ -10,5 +11,5 @@ class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     posterName = db.Column(db.String(16))
     content = db.Column(db.String(1000))
-    postTime = db.Column(db.Integer)
+    postTime = db.Column(db.DateTime(), default=datetime.now, index=True)
     likes = db.Column(db.Integer)

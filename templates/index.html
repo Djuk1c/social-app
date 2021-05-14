@@ -33,7 +33,7 @@
             <div class="poster-info">
                 <img src="{{url_for('static', filename='avatars/' + post.posterName + '.png')}}" class="avatar" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
                 <p class="poster-name">@{{ post.posterName }}</p>
-                <p class="post-time">• {{ '{0:0.0f}'.format((currTime-post.postTime)/60) }} min ago</p>
+                <p class="post-time">• {{ post.postTime|fromnow }}</p>
             </div>
             {% if current_user.username == post.posterName %}
             <div class="post-edit-icons">

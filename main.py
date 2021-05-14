@@ -11,9 +11,8 @@ main = Blueprint('main', __name__)
 #
 @main.route("/")
 def index():
-    posts = Posts.query.order_by(Posts.id.desc()).all()
-    currTime = int(time.time())
-    return render_template('index.html', posts=posts, currTime=currTime)
+    posts = Posts.query.order_by(Posts.postTime.desc()).all()
+    return render_template('index.html', posts=posts)
 
 #
 @main.route("/login")
@@ -73,13 +72,13 @@ def submit_post():
     content = request.form['status']
     posterName = current_user.username
     likes = 0
-    postTime = int(time.time())
+    #postTime = int(time.time())
 
     if len(content) < 2:
         flash('Your post must be at least 2 characters long.')
         return redirect(url_for('main.index'))
 
-    new_post = Posts(posterName=posterName, content=content, postTime=postTime, likes=likes)
+    new_post = Posts(posterName=posterName, content=content, likes=likes)
     db.session.add(new_post)
     db.session.commit()
 
