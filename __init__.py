@@ -31,6 +31,6 @@ def create_app():
 
     @app.template_filter('fromnow')
     def fromnow(date):
-        return timeago.format(date, datetime.datetime.now())
+        return timeago.format(date, datetime.datetime.utcnow())
 
     return app

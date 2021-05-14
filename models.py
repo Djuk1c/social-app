@@ -11,5 +11,5 @@ class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     posterName = db.Column(db.String(16))
     content = db.Column(db.String(1000))
-    postTime = db.Column(db.DateTime(), default=datetime.now, index=True)
+    postTime = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     likes = db.Column(db.Integer)
