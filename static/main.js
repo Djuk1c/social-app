@@ -1,4 +1,7 @@
+var likesModal = document.getElementById("likesModal");
+
 isEditing = false;
+likesShowing = false;
 
 function onEditClick(e)
 {
@@ -32,7 +35,23 @@ function onEditClick(e)
     isEditing = !isEditing;
 }
 
-function onDeleteClick(e)
+function onLikesClick(e)
 {
-
+    console.log(e);
+    if (!likesShowing)
+    {
+        likesModal.style.display = "block";
+    }
+    else
+    {
+        likesModal.style.display = "none";
+    }
+    likesShowing = !likesShowing;
 }
+
+window.onclick = function(event) 
+{
+    if (event.target == likesModal) {
+        likesModal.style.display = "none";
+    }
+  }

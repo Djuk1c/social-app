@@ -39,4 +39,9 @@ def create_app():
         likeList = ast.literal_eval(likeList)
         return len(likeList)
 
+    @app.template_filter('retList')
+    def retList(list):
+        list = ast.literal_eval(list)
+        return list
+
     return app

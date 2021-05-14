@@ -133,5 +133,9 @@ def like_post():
         oldPostArray.append(current_user.username)
         postToLike.likes = repr(oldPostArray)
         db.session.commit()
-
+    else:
+        oldPostArray.remove(current_user.username)
+        postToLike.likes = repr(oldPostArray)
+        db.session.commit()
+    
     return redirect(url_for('main.index'))
