@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 import datetime, timeago
+import ast
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
@@ -32,5 +33,10 @@ def create_app():
     @app.template_filter('fromnow')
     def fromnow(date):
         return timeago.format(date, datetime.datetime.utcnow())
+
+    @app.template_filter('likesCount')
+    def likesCount(likeList):
+        likeList = ast.literal_eval(likeList)
+        return len(likeList)
 
     return app

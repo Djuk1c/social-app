@@ -6,6 +6,7 @@ from .models import Posts, User
 from sqlalchemy import func
 from . import db
 import time
+import ast
 
 main = Blueprint('main', __name__)
 #
@@ -71,14 +72,14 @@ def submit():
 def submit_post():
     content = request.form['status']
     posterName = current_user.username
-    likes = 0
+    likes = []
     #postTime = int(time.time())
 
     if len(content) < 2:
         flash('Your post must be at least 2 characters long.')
         return redirect(url_for('main.index'))
-
-    new_post = Posts(posterName=posterName, content=content, likes=likes)
+    
+    new_post = Posts(posterName=posterName, content=content, likes=repr(likes))
     db.session.add(new_post)
     db.session.commit()
 
@@ -111,11 +112,26 @@ def edit_post():
 @login_required
 def delete_post():
     postId = request.args.get('post')
-    print(postId)
 
     postToDelete = Posts.query.get_or_404(postId)
     if postToDelete.posterName == current_user.username:
         db.session.delete(postToDelete)
+        db.session.commit()
+
+    return redirect(url_for('main.index'))
+
+
+#
+@main.route('/like_post')
+@login_required
+def like_post():
+    postId = request.args.get('post')
+
+    postToLike = Posts.query.get_or_404(postId)
+    oldPostArray = ast.literal_eval(postToLike.likes)
+    if current_user.username not in oldPostArray:
+        oldPostArray.append(current_user.username)
+        postToLike.likes = repr(oldPostArray)
         db.session.commit()
 
     return redirect(url_for('main.index'))

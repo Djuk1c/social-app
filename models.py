@@ -12,4 +12,4 @@ class Posts(db.Model):
     posterName = db.Column(db.String(16))
     content = db.Column(db.String(1000))
     postTime = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
-    likes = db.Column(db.Integer)
+    likes = db.Column(db.String)
