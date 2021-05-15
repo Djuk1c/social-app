@@ -138,6 +138,8 @@ def delete_post():
     if postToDelete.posterName == current_user.username:
         db.session.delete(postToDelete)
         db.session.commit()
+        if postToDelete.image != 'none.png':
+            os.remove('static/uploads/' + postToDelete.image)
 
     return redirect(request.referrer)
 
