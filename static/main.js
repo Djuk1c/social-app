@@ -80,3 +80,12 @@ function onPostClick(e, id)
         window.location.href="post?id=" + id;
     }
 }
+
+function openCommentBox()
+{
+    commentBox = document.getElementById('comment-post-div')
+    if (commentBox)
+    {
+        commentBox.style.display = 'block';
+    }
+}

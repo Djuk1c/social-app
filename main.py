@@ -3,7 +3,7 @@ from flask import Flask, render_template, Blueprint, redirect, url_for, request,
 from flask.signals import request_tearing_down
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, current_user, logout_user
-from .models import Posts, User
+from .models import Posts, User, Comments
 from sqlalchemy import func
 from . import db
 from PIL import Image
@@ -109,6 +109,29 @@ def submit():
         return redirect(request.referrer)
 
 
+@main.route('/comment_post', methods=['POST', 'GET'])
+@login_required
+def comment():
+    if request.method == 'GET':
+        return redirect(url_for('main.index'))
+
+    elif request.method == 'POST':
+        content = request.form['comment_post']
+        postId = request.args.get('post')
+        posterName = current_user.username
+        
+        if len(content) < 2:
+            flash('Your post must be at least 2 characters long.')
+            return redirect(request.referrer)
+
+        orgPost = Posts.query.filter_by(id=postId).first()
+        if orgPost:
+            new_comment = Comments(posterName=posterName, content=content, post_id=postId)
+            db.session.add(new_comment)
+            db.session.commit()
+
+    return redirect(request.referrer)
+
 @main.route('/edit_post', methods=['POST', 'GET'])
 @login_required
 def edit():
@@ -143,7 +166,7 @@ def delete_post():
         if postToDelete.image != 'none.png':
             os.remove('static/uploads/' + postToDelete.image)
 
-    return redirect(request.referrer)
+    return redirect(url_for('main.index'))
 
 
 #
@@ -170,5 +193,10 @@ def post():
     postId = request.args.get('id')
 
     post = Posts.query.filter_by(id=postId).first()
+    #comments = post.comments
 
-    return render_template('post.html', post=post)
+    comments = db.session.query(Comments).filter(Comments.post_id == postId).all()
+    comments = comments[::-1]
+
+    return render_template('post.html', post=post, comments=comments)
+

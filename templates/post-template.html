@@ -51,7 +51,7 @@
     {% endif %}
     <div class="like-comment-count">
         <p class="postLikes" id="postLikes" onclick="onLikesClick(event, {{post.id}})" style="cursor:pointer;">Likes: {{ post.likes|likesCount }}</p>
-        <p class="postComments" id="postComments">Comments: 0</p>
+        <p class="postComments" id="postComments">Comments: {{ post.comments|commentsCount }}</p>
     </div>
     {% if current_user.is_authenticated %}
     <div class="reaction-buttons">
@@ -69,9 +69,38 @@
             </svg>
         </a>
         {% endif %}
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chat-left icon" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chat-left icon" viewBox="0 0 16 16" onclick="openCommentBox()" style="cursor: pointer;">
         <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
         </svg>
     </div>
     {% endif %}
+
+    {% if request.path == '/post' %}
+    <!--Add comment box-->
+    <div class="edit-post-div" id="comment-post-div">
+        <form method="POST" action="/comment_post?post={{ post.id }}">
+            <textarea name="comment_post" id="comment_post" cols="30" rows="10" class="edit-box" wrap="hard" autocomplete="off" placeholder="Your Comment"></textarea>
+            <div class="send-btn">
+                <button class="send-status">Post comment</button>
+            </div>
+        </form>
+    </div>
+    <!--Add comment box-->
+
+    <!--COMMENTS-->
+    <hr>
+    {% for comment in comments %}
+    <div class="comments-container">
+        <div class="poster-info">
+            <img src="{{url_for('static', filename='avatars/' + post.posterName + '.png')}}" class="avatar" id="avatar" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
+            <p class="poster-name" id="poster-name">@{{ comment.posterName }}</p>
+            <p class="post-time">• {{ comment.postTime|fromnow }}</p>
+        </div>
+        <p class="post-text" id="post-text">{{ comment.content }}</p>
+    </div>
+    <hr>
+    <!--COMMENTS-->
+    {% endfor %}
+    {% endif %}
+
 </div>

@@ -21,6 +21,7 @@ def create_app():
 
     from .models import User
     from .models import Posts
+    from .models import Comments
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -43,5 +44,9 @@ def create_app():
     def retList(list):
         list = ast.literal_eval(list)
         return list
+
+    @app.template_filter('commentsCount')
+    def commentsCount(comments):
+        return len(comments)
 
     return app
