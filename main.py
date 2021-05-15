@@ -193,7 +193,6 @@ def post():
     postId = request.args.get('id')
 
     post = Posts.query.filter_by(id=postId).first()
-    #comments = post.comments
 
     comments = db.session.query(Comments).filter(Comments.post_id == postId).all()
     comments = comments[::-1]
