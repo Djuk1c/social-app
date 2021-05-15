@@ -92,7 +92,7 @@
     {% for comment in comments %}
     <div class="comments-container">
         <div class="poster-info">
-            <img src="{{url_for('static', filename='avatars/' + post.posterName + '.png')}}" class="avatar" id="avatar" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
+            <img src="{{url_for('static', filename='avatars/' + comment.posterName + '.png')}}" class="avatar" id="avatar" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
             <p class="poster-name" id="poster-name">@{{ comment.posterName }}</p>
             <p class="post-time">• {{ comment.postTime|fromnow }}</p>
         </div>
