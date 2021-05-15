@@ -1,4 +1,4 @@
-<div class="post-container" onclick="onPostClick(event, {{post.id}})">
+<div class="post-container" onclick="onPostClick(event, {{post.id}})" {% if request.path == '/post' %} style="width: 40%; cursor: default;" {% endif %}>
 
     <!--Likes modal-->
     <div class="likes-modal" id="likesModal{{post.id}}"> 
@@ -19,17 +19,17 @@
 
     <div class="upper-part">
         <div class="poster-info">
-            <img src="{{url_for('static', filename='avatars/' + post.posterName + '.png')}}" class="avatar" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
-            <p class="poster-name">@{{ post.posterName }}</p>
+            <img src="{{url_for('static', filename='avatars/' + post.posterName + '.png')}}" class="avatar" id="avatar" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
+            <p class="poster-name" id="poster-name">@{{ post.posterName }}</p>
             <p class="post-time">• {{ post.postTime|fromnow }}</p>
         </div>
         {% if current_user.is_authenticated %}
         {% if current_user.username == post.posterName %}
         <div class="post-edit-icons">
-            <i class="bi bi-pencil-square" style="font-size: 24px;" onclick="onEditClick(event)"></i>
-        <a href="/delete_post?post={{ post.id }}">    
-            <i class="bi bi-trash" style="font-size: 24px;"></i>
-        </a>
+            <i class="bi bi-pencil-square" id="postEditIcons" style="font-size: 24px;" onclick="onEditClick(event)"></i>
+            <a href="/delete_post?post={{ post.id }}">    
+                <i class="bi bi-trash" id="postEditIcons" style="font-size: 24px;"></i>
+            </a>
         </div>
         {% endif %}
         {% endif %}
@@ -46,24 +46,24 @@
     <p class="post-text" id="post-text">{{ post.content }}</p>
     {% if post.image != 'none.png' %}
     <div class="uploaded-pic-container">
-        <img src="{{url_for('static', filename='uploads/' + post.image )}}" class="uploaded-pic" alt="Picture not found on the server.">
+        <img src="{{url_for('static', filename='uploads/' + post.image )}}" class="uploaded-pic" alt="Picture not found on the server." {% if request.path == '/post' %} style="max-height: 500px;" {% endif %}>
     </div>
     {% endif %}
     <div class="like-comment-count">
-        <p class="postLikes" onclick="onLikesClick(event, {{post.id}})" style="cursor:pointer;">Likes: {{ post.likes|likesCount }}</p>
-        <p class="postComments">Comments: 0</p>
+        <p class="postLikes" id="postLikes" onclick="onLikesClick(event, {{post.id}})" style="cursor:pointer;">Likes: {{ post.likes|likesCount }}</p>
+        <p class="postComments" id="postComments">Comments: 0</p>
     </div>
     {% if current_user.is_authenticated %}
     <div class="reaction-buttons">
         {% if current_user.username not in post.likes %}
-        <a href="/like_post?post={{ post.id }}">
+        <a href="/like_post?post={{ post.id }}" id="likePost">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-heart icon" viewBox="0 0 16 16">
                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
             </svg>
         </a>
         {% endif %}
         {% if current_user.username in post.likes %}
-        <a href="/like_post?post={{ post.id }}">
+        <a href="/like_post?post={{ post.id }}" id="likePost">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-heart icon" viewBox="0 0 16 16" style="fill: #fc4176;">
                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
             </svg>

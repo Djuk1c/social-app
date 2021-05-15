@@ -135,6 +135,7 @@ input:focus, textarea:focus {
 }
 
 .edit-post-div{
+    text-align: center;
     display: none;
 }
 
@@ -187,7 +188,7 @@ input:focus, textarea:focus {
     border-radius: 5px;
     padding: 12px;
     width: 30%;     /*45*/
-    
+    cursor: pointer;
 }
 
 .avatar{

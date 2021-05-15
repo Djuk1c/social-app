@@ -1,8 +1,15 @@
-document.getElementById("file_upload").value=null; 
-var likesModal
+var upload = document.getElementById("file_upload");
+if (upload)
+    upload.value=null;
 
+var likesModal
 isEditing = false;
 likesShowing = false;
+
+let drag = false;
+document.addEventListener('mousedown', () => drag = false);
+document.addEventListener('mousemove', () => drag = true);
+document.addEventListener('mouseup', () => console.log(drag ? 'drag' : 'click'));
 
 window.onclick = function(event) 
 {
@@ -60,7 +67,15 @@ function onLikesClick(e, id)
 
 function onPostClick(e, id)
 {
-    if (window.location.pathname != "/post" && e.target==this)
+    var elm = e.target;
+    var filter = ['avatar', 'poster-name', 'postComments', 'postLikes', 'likePost', 'postEditIcons']
+    
+    if (filter.includes(elm.id) || elm.id.includes('likesModal') || drag)
+    {
+        return;
+    }
+
+    if (window.location.pathname != "/post")
     {
         window.location.href="post?id=" + id;
     }
