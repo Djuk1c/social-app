@@ -64,9 +64,11 @@ def register():
         new_user = User(username=username, password=generate_password_hash(password, method='sha256'))
         db.session.add(new_user)
         db.session.commit()
+        user = User.query.filter(func.lower(User.username)==func.lower(username)).first()
+        login_user(user)
 
-        flash('You registered sucessfully. Please log in.')
-        return redirect(url_for('main.login'))
+        flash('You registered sucessfully.')
+        return redirect(url_for('main.index'))
 
 
 @main.route('/submit_post', methods=['POST', 'GET'])
