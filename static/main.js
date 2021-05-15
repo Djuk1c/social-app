@@ -1,7 +1,16 @@
-var likesModal = document.getElementById("likesModal");
+document.getElementById("file_upload").value=null; 
+var likesModal
 
 isEditing = false;
 likesShowing = false;
+
+window.onclick = function(event) 
+{
+    if (event.target == likesModal && likesShowing) {
+        likesModal.style.display = "none";
+        likesShowing = !likesShowing;
+    }
+}
 
 function onEditClick(e)
 {
@@ -35,9 +44,9 @@ function onEditClick(e)
     isEditing = !isEditing;
 }
 
-function onLikesClick(e)
+function onLikesClick(e, id)
 {
-    console.log(e);
+    likesModal = document.getElementById("likesModal" + id);
     if (!likesShowing)
     {
         likesModal.style.display = "block";
@@ -49,9 +58,10 @@ function onLikesClick(e)
     likesShowing = !likesShowing;
 }
 
-window.onclick = function(event) 
+function onPostClick(e, id)
 {
-    if (event.target == likesModal) {
-        likesModal.style.display = "none";
+    if (window.location.pathname != "/post" && e.target==this)
+    {
+        window.location.href="post?id=" + id;
     }
-  }
+}

@@ -1,113 +1,134 @@
 from operator import pos
 from flask import Flask, render_template, Blueprint, redirect, url_for, request, flash
+from flask.signals import request_tearing_down
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, current_user, logout_user
 from .models import Posts, User
 from sqlalchemy import func
 from . import db
-import time
-import ast
+from PIL import Image
+import os, ast, uuid
 
 main = Blueprint('main', __name__)
-#
+
+ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg'}
+
 @main.route("/")
 def index():
     posts = Posts.query.order_by(Posts.postTime.desc()).all()
     return render_template('index.html', posts=posts)
 
-#
-@main.route("/login")
+
+@main.route("/login", methods=['POST', 'GET'])
 def login():
-    return render_template('login.html')
-@main.route("/login", methods=['POST'])
-def login_post():
-    username = request.form.get('username')
-    password = request.form.get('password')
+    if request.method == 'GET':
+        return render_template('login.html')
 
-    user = User.query.filter(func.lower(User.username)==func.lower(username)).first()
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('main.login'))
+        user = User.query.filter(func.lower(User.username)==func.lower(username)).first()
 
-    login_user(user)
-    return redirect(url_for('main.index'))
+        if not user or not check_password_hash(user.password, password):
+            flash('Please check your login details and try again.')
+            return redirect(url_for('main.login'))
+
+        login_user(user)
+        return redirect(url_for('main.index'))
 
 @main.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
-#
-@main.route('/register')
+
+@main.route('/register', methods=['POST', 'GET'])
 def register():
-    return render_template('register.html')
-@main.route('/register', methods=['POST'])
-def register_post():
-    username = request.form.get('username')
-    password = request.form.get('password')
+    if request.method == 'GET':
+        return render_template('register.html')
 
-    user = User.query.filter(func.lower(User.username)==func.lower(username)).first()
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-    if user:
-        flash('Username is already taken.')
-        return redirect(url_for('main.register'))
-    elif len(username) < 5 or len(password) < 5:
-        flash('Username and/or password must be longer than 5 characters.')
-        return redirect(url_for('main.register'))
-    
-    new_user = User(username=username, password=generate_password_hash(password, method='sha256'))
-    db.session.add(new_user)
-    db.session.commit()
+        user = User.query.filter(func.lower(User.username)==func.lower(username)).first()
 
-    flash('You registered sucessfully. Please log in.')
-    return redirect(url_for('main.login'))
-
-#
-@main.route('/submit_post')
-def submit():
-    return redirect(url_for('main.index'))
-@main.route('/submit_post', methods=['POST'])
-@login_required
-def submit_post():
-    content = request.form['status']
-    posterName = current_user.username
-    likes = []
-    #postTime = int(time.time())
-
-    if len(content) < 2:
-        flash('Your post must be at least 2 characters long.')
-        return redirect(url_for('main.index'))
-    
-    new_post = Posts(posterName=posterName, content=content, likes=repr(likes))
-    db.session.add(new_post)
-    db.session.commit()
-
-    return redirect(url_for('main.index'))
-
-#
-@main.route('/edit_post')
-def edit():
-    return redirect(url_for('main.index'))
-@main.route('/edit_post', methods=['POST'])
-@login_required
-def edit_post():
-    content = request.form['edit_post']
-    postId = request.args.get('post')
-    
-    if len(content) < 2:
-        flash('Your post must be at least 2 characters long.')
-        return redirect(url_for('main.index'))
-    
-    postToUpdate = Posts.query.get_or_404(postId)
-    if postToUpdate.posterName == current_user.username:
-        postToUpdate.content = content
+        if user:
+            flash('Username is already taken.')
+            return redirect(url_for('main.register'))
+        elif len(username) < 5 or len(password) < 5:
+            flash('Username and/or password must be longer than 5 characters.')
+            return redirect(url_for('main.register'))
+        
+        new_user = User(username=username, password=generate_password_hash(password, method='sha256'))
+        db.session.add(new_user)
         db.session.commit()
 
-    return redirect(url_for('main.index'))
+        flash('You registered sucessfully. Please log in.')
+        return redirect(url_for('main.login'))
 
 
-#
+@main.route('/submit_post', methods=['POST', 'GET'])
+@login_required
+def submit():
+    if request.method == 'GET':
+        return redirect(url_for('main.index'))
+    
+    elif request.method == 'POST':
+        content = request.form['status']
+        posterName = current_user.username
+        likes = []
+
+        if len(content) < 2:
+            flash('Your post must be at least 2 characters long.')
+            return redirect(request.referrer)
+
+        genName = 'none'
+        if request.files.get('picUpload', None):
+            picture = request.files['picUpload']
+            if os.path.splitext(picture.filename)[1] not in ALLOWED_EXTENSIONS:
+                flash('Not allowed file extension.')
+                return redirect(request.referrer)
+
+            genName = str(uuid.uuid4())
+            path = os.path.join('static/uploads', genName + os.path.splitext(picture.filename)[1])
+            picture.save(path)
+            # Converting the image to PNG and removing the old one.
+            if os.path.splitext(picture.filename)[1] != '.png':
+                imToConvert = Image.open(path)
+                imToConvert.save(os.path.join('static/uploads', genName + '.png'))
+                os.remove('static/uploads/' + genName + os.path.splitext(picture.filename)[1])
+        
+        new_post = Posts(posterName=posterName, content=content, likes=repr(likes), image=genName + '.png')
+        db.session.add(new_post)
+        db.session.commit()
+
+        return redirect(request.referrer)
+
+
+@main.route('/edit_post', methods=['POST', 'GET'])
+@login_required
+def edit():
+    if request.method == 'GET':
+        return redirect(url_for('main.index'))
+    
+    elif request.method == 'POST':
+        content = request.form['edit_post']
+        postId = request.args.get('post')
+        
+        if len(content) < 2:
+            flash('Your post must be at least 2 characters long.')
+            return redirect(request.referrer)
+        
+        postToUpdate = Posts.query.get_or_404(postId)
+        if postToUpdate.posterName == current_user.username:
+            postToUpdate.content = content
+            db.session.commit()
+
+        return redirect(request.referrer)
+
+
 @main.route('/delete_post')
 @login_required
 def delete_post():
@@ -118,7 +139,7 @@ def delete_post():
         db.session.delete(postToDelete)
         db.session.commit()
 
-    return redirect(url_for('main.index'))
+    return redirect(request.referrer)
 
 
 #
@@ -138,4 +159,12 @@ def like_post():
         postToLike.likes = repr(oldPostArray)
         db.session.commit()
     
-    return redirect(url_for('main.index'))
+    return redirect(request.referrer)
+
+@main.route('/post')
+def post():
+    postId = request.args.get('id')
+
+    post = Posts.query.filter_by(id=postId).first()
+
+    return render_template('post.html', post=post)

@@ -13,3 +13,4 @@ class Posts(db.Model):
     content = db.Column(db.String(1000))
     postTime = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     likes = db.Column(db.String)
+    image = db.Column(db.String, default='none')
