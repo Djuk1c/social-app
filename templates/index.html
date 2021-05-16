@@ -3,7 +3,7 @@
 {% endblock %}
 {% block title %}Home{% endblock %}
 {% block body %}
-{% if current_user.is_authenticated %}
+
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -15,22 +15,29 @@
 {% endwith %}
 
 <div class="main">
-    <form method="POST" enctype="multipart/form-data" action="/submit_post">
-        <div class="status-container">
-            <p>Welcome back<p class="logged-username" style="display:inline">@{{ current_user.username }}</p></p>
-            <input type="file" id="file_upload" name="picUpload" hidden>
-            <label for="file_upload" class="upload-button"><i class="bi bi-upload"></i></label>
-            <textarea name="status" id="status" cols="30" rows="10" class="status-box" wrap="hard" placeholder="What's happening?" autocomplete="off"></textarea>
-            <div class="send-btn">
-                <button class="send-status">Send</button>
+    {% include 'left-side-main-template.html' %}
+    <div class="middle-side-main">
+        {% if current_user.is_authenticated %}
+        <form method="POST" enctype="multipart/form-data" action="/submit_post">
+            <div class="status-container">
+                
+                <input type="file" id="file_upload" name="picUpload" hidden>
+                <label for="file_upload" class="upload-button"><i class="bi bi-upload"></i></label>
+                <textarea name="status" id="status" cols="30" rows="10" class="status-box" wrap="hard" placeholder="What's happening?" autocomplete="off"></textarea>
+                <div class="send-btn">
+                    <button class="send-status">Send</button>
+                </div>
             </div>
+        </form>
+        {% endif %}
+        <div class="posts">
+        {% for post in posts %}
+        {% include 'post-template.html' %}
+        {% endfor %}
         </div>
-    </form>
-{% endif %}
-    <div class="posts">
-    {% for post in posts %}
-    {% include 'post-template.html' %}
-    {% endfor %}
+    </div>
+    <div class="right-side-main">
+        
     </div>
 </div>
 {% endblock %}

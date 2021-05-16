@@ -1,4 +1,4 @@
-<div class="post-container" onclick="onPostClick(event, {{post.id}})" {% if request.path == '/post' %} style="width: 40%; cursor: default;" {% endif %}>
+<div class="post-container" onclick="onPostClick(event, {{post.id}})">
 
     <!--Likes modal-->
     <div class="likes-modal" id="likesModal{{post.id}}"> 
@@ -46,7 +46,7 @@
     <p class="post-text" id="post-text">{{ post.content }}</p>
     {% if post.image != 'none.png' %}
     <div class="uploaded-pic-container">
-        <img src="{{url_for('static', filename='uploads/' + post.image )}}" class="uploaded-pic" alt="Picture not found on the server." {% if request.path == '/post' %} style="max-height: 500px;" {% endif %}>
+        <img src="{{url_for('static', filename='uploads/' + post.image )}}" class="uploaded-pic" alt="Picture not found on the server.">
     </div>
     {% endif %}
     <div class="like-comment-count">

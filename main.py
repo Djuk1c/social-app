@@ -67,7 +67,6 @@ def register():
         user = User.query.filter(func.lower(User.username)==func.lower(username)).first()
         login_user(user)
 
-        flash('You registered sucessfully.')
         return redirect(url_for('main.index'))
 
 

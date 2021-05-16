@@ -1,0 +1,10 @@
+<div class="left-side-main">
+    {% if current_user.is_authenticated %}
+    <p class="logged-username">{{ current_user.username }}</p>
+    <img src="{{url_for('static', filename='avatars/' + current_user.username + '.png')}}" class="avatar-side" onerror="this.onerror=null;this.src='https://i.imgur.com/ADuIaMn.png';"> 
+    <p class="logged-username" style="font-weight: normal; ">Home</p>
+    <p class="logged-username" style="font-weight: normal; ">Profile</p>
+    <p class="logged-username" style="font-weight: normal; ">Messages</p>
+    <p class="logged-username" style="font-weight: normal; ">Notifications</p>
+    {% endif %}
+</div>

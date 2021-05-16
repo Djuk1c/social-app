@@ -2,7 +2,15 @@
 {% block title %}{{ post.posterName }}'s post{% endblock %}
 
 {% block body %}
-<div class="posts">
-    {% include 'post-template.html' %}
+<div class="main">
+    {% include 'left-side-main-template.html' %}
+    <div class="middle-side-main">
+        <div class="posts">
+            {% include 'post-template.html' %}
+        </div>
+    </div>
+    <div class="right-side-main">
+
+    </div>
 </div>
 {% endblock %}

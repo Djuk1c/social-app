@@ -68,7 +68,7 @@ function onLikesClick(e, id)
 function onPostClick(e, id)
 {
     var elm = e.target;
-    var filter = ['avatar', 'poster-name', 'postComments', 'postLikes', 'likePost', 'postEditIcons']
+    var filter = ['avatar', 'poster-name', 'postComments', 'postLikes', 'likePost', 'postEditIcons', 'edit_post']
     
     if (filter.includes(elm.id) || elm.id.includes('likesModal') || drag)
     {
